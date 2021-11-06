@@ -37,6 +37,7 @@ These instructions assume you already have a Ruby on Rails webapp.  If you are s
 
 If you are not using Rails, you can still use the example code in `example_controller.rb` from this distribution - but you will also need to implement your own QueueFairService class to encapsulate your alternative HTTP framework.  It's only four basic methods to write.
 
+Here's how to install the adapter in your existing Rails webapp.
 
 **1.** Copy the queue_fair_adapter folder from this distribution into the /lib folder of your framework.  
 
