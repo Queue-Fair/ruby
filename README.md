@@ -39,7 +39,7 @@ If you are not using Rails, you can still use the example code in `example_contr
 
 Here's how to install the adapter in your existing Rails webapp.
 
-**1.** Copy the queue_fair_adapter folder from this distribution into the /lib folder of your framework.  
+**1.** Copy the queue_fair folder from this distribution into the /lib folder of your framework.
 
 
 **2.** By default, Queue-Fair will cache your account settings in the top level folder of your webapp, in a subfolder called QFCache.  If you want the cache to reside elsewhere, do
@@ -48,8 +48,9 @@ Here's how to install the adapter in your existing Rails webapp.
     sudo mkdir /opt/qfsettings    
     sudo chmod 777 /opt/qfsettings
 ```
+and then set QueueFairConfig.settings_file_cache_location to match.
 
-Note: The settings folder can go anywhere, but for maximum security this should not be in your web root.  The executable permission is needed on the folder so that the Adapter can examine its contents.  You can see your Queue-Fair settings in the Portal File Manager - they are updated when you hit Make Live.  For optimum performance, consider placing the cache folder on a Ramdisk.
+Note: The settings folder can go anywhere, but for maximum security this should not be in your web root.  The executable permission is needed on the folder so that the Adapter can examine its contents.  You can see your Queue-Fair settings in the Portal File Manager - they are updated when you hit Make Live.  For optimum performance, consider placing the cache folder on a small Ramdisk.
 
 **3.** **IMPORTANT:** Make sure the system clock on your webserver is accurately set to network time! On unix systems, this is usually done with the ntp package.  It doesn't matter which timezone you are using.  For Debian/Ubuntu:
 
@@ -57,10 +58,9 @@ Note: The settings folder can go anywhere, but for maximum security this should 
     sudo apt-get install ntp
 ```
 
-**4.** Modify `anypage_controller.rb` and add the code from the `example_controller.rb`  file in this distribution
+**4.** Modify `anypage_controller.rb` and add the code from the `example_controller.rb` file in this distribution
 
-
-**5.** Enter your account name and secret where indicated, and (optionally) the folder location you created in step 2.  You can also modify queue_fair_config.rb and preset them there, which is more efficient.
+**5.** Enter your account name and secret where indicated, and (optionally) the folder location you created in step 2.  You can also modify queue_fair_config.rb and preset these values there, which is more efficient than setting them with every page request.
 
 **6.** Note the `QueueFairConfig.settings_file_cache_lifetime_minutes` setting - this is how often your web server will check for updated settings from the Queue-Fair queue servers (which change when you hit Make Live).   The default value is 5 minutes.  You can set this to 0 to download a fresh copy with every request but **DON'T DO THIS** on your production machine/live queue with real people, or your server may collapse under load.
 
@@ -70,7 +70,7 @@ Note: The settings folder can go anywhere, but for maximum security this should 
 
 That's it your done!
 
-In your Ruby controllers you should always ensure that `adapter.go()` is the *first* thing that happens within your functions.  This will ensure that the Adapter is the first thing that runs when a vistor accesses any page, which is necessary both to protect your server from load from lots of visitors and also so that the adapter can set the necessary cookies.  You can then use the Activation Rules in the Portal to set which pages on your site may trigger a queue.
+In your Ruby controllers you should always ensure that `adapter.go()` is the *first* thing that happens.  This will ensure that the Adapter is the first thing that runs when a vistor accesses any page, which is necessary both to protect your server from load from lots of visitors and also so that the adapter can set the necessary cookies.  You can add the adapter to all your controllers and use the Activation Rules in the Portal to set which pages on your site may trigger a queue.
 
 In the case where the Adapter sends the request elsewhere (for example to show the user a queue page), `go()` will return False and the rest of the page should not be run.
 
@@ -99,7 +99,7 @@ Go back to the Portal and put the queue in Demo mode on the Queue Settings page.
  - If the Adapter is in Safe mode, also verify that the QueueFair-Store cookie has not changed its value.
  - Hit Refresh.  Verify that you are not queued again.  Verify that the cookies have not changed their values.
 
-**IMPORTANT:**  Once you are sure the Server-Side Adapter is working as expected, remove the Client-Side JavaScript Adapter tag from your pages, and don't forget to disable debug level logging by setting `QueueFairConfig.DEBUG` to False (its default value), and also set `QueueFairConfig.SETTINGS_FILE_CACHE_LIFETIMER_MINUTES` to at least 5 (also its default value).
+**IMPORTANT:**  Once you are sure the Server-Side Adapter is working as expected, remove the Client-Side JavaScript Adapter tag from your pages, and don't forget to disable debug level logging by setting `QueueFairConfig.DEBUG` to `false` (its default value), and also set `QueueFairConfig.SETTINGS_FILE_CACHE_LIFETIMER_MINUTES` to at least 5 (also its default value).
 
 **IMPORTANT:**  Responses that contain a Location header or a Set-Cookie header from the Adapter must not be cached!  You can check which cache-control headers are present using your browser's Inspector Network Tab.  The Adapter will add a Cache-Control header to disable caching if it sets a cookie or sends a redirect - but you must not override these with your own code or Rails framework.
 
@@ -118,5 +118,3 @@ The Server-Side Adapter contains multiple checks to prevent visitors bypassing t
 All client-modifiable settings are in the `QueueFairConfig` class.  You should never find you need to modify `queue_fair_adapter.rb` - but if something comes up, please contact support@queue-fair.com right away so we can discuss your requirements.
 
 Remember we are here to help you! The integration process shouldn't take you more than an hour - so if you are scratching your head, ask us.  Many answers are contained in the Technical Guide too.  We're always happy to help!
-
-
