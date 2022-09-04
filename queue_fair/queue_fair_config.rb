@@ -60,6 +60,8 @@ module QueueFair
 
     # Whether to send the visitor to the Adapter server for counting (simple mode),
     # or consult the Adapter server (safe mode).  The recommended value is "safe".
+    # If you change this to "simple", consider setting strip_passed_string above to
+    # false to make it easier for Google to crawl your pages.
     cattr_accessor :adapter_mode
     @@adapter_mode = 'safe'
   end
