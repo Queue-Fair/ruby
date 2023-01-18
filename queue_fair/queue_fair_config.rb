@@ -24,7 +24,7 @@ module QueueFair
     # Time limit for Passed Strings to be considered valid,
     # before and after the current time
     cattr_accessor :query_time_limit_seconds
-    @@query_time_limit_seconds = 30
+    @@query_time_limit_seconds = 300
 
     # Valid values are true, false, or an "IP_address".
     cattr_accessor :debug
