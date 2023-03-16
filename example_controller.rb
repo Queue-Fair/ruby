@@ -4,6 +4,8 @@ require 'queue_fair/queue_fair'
 
 class ExampleController < ApplicationController
   def index
+    # The following values must be replaced with the values shown on th
+    # Account -> Your Account page of the Portal.
     QueueFair::QueueFairConfig.account = 'ACCOUNT_SYSTEM_NAME_FROM_PORTAL'
     QueueFair::QueueFairConfig.account_secret = 'ACCOUNT_SECRET_FROM_PORTAL'
 
